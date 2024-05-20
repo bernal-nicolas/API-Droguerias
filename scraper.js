@@ -128,23 +128,23 @@ async function scrapeData(query) {
 
   //Creacion JSON
 
-  let drogueria1 = {
-    nombre_drogueria: "Cruz Verde",
+  let farmacia1 = {
+    nombre_farmacia: "Cruz Verde",
     articulos: []
   };
 
-  let drogueria2 = {
-    nombre_drogueria: "La Rebaja",
+  let farmacia2 = {
+    nombre_farmacia: "La Rebaja",
     articulos: []
   };
 
-  let drogueria3 = {
-    nombre_drogueria: "Farmatodo",
+  let farmacia3 = {
+    nombre_farmacia: "Farmatodo",
     articulos: []
   };
 
-  let drogueria4 = {
-    nombre_drogueria: "Farmacia Torres",
+  let farmacia4 = {
+    nombre_farmacia: "Farmacia Torres",
     articulos: []
   };
 
@@ -156,7 +156,7 @@ async function scrapeData(query) {
       imagen: imagenes[i],
       enlaces: enlaces[i]
     };
-    drogueria1.articulos.push(producto);
+    farmacia1.articulos.push(producto);
   }
 
 
@@ -167,7 +167,7 @@ async function scrapeData(query) {
       imagen: imagenes2[i],
       enlaces: enlaces2[i]
     };
-    drogueria2.articulos.push(producto);
+    farmacia2.articulos.push(producto);
   }
 
   for (let i = 0; i < nombres3.length; i++) {
@@ -177,7 +177,7 @@ async function scrapeData(query) {
       imagen: imagenes3[i],
       enlaces: enlaces3[i]
     };
-    drogueria3.articulos.push(producto);
+    farmacia3.articulos.push(producto);
   }
 
   for (let i = 0; i < nombres4.length; i++) {
@@ -187,11 +187,11 @@ async function scrapeData(query) {
       imagen: imagenes4[i],
       enlaces: enlaces4[i]
     };
-    drogueria4.articulos.push(producto);
+    farmacia4.articulos.push(producto);
   }
 
 
-  return [drogueria1, drogueria2, drogueria3, drogueria4];
+  return [farmacia1, farmacia2, farmacia3, farmacia4];
 }
 
 module.exports = scrapeData;

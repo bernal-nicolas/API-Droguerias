@@ -72,8 +72,29 @@ async function scrapeData(query) {
     return enlaces.slice(0, 3).map(enlace => "https://www.larebajavirtual.com" + enlace.getAttribute('href'));
   });
 
+  // Farmatodo
 
+  await page.goto(`https://www.farmatodo.com.co/buscar?product=${encodeURIComponent(query)}`);
 
+  await page.waitForTimeout(5000);
+
+  await page.screenshot({ path: 'pagina3_screenshot.png', fullPage: true });
+
+  const nombres3 = await page.$$eval('div.text-left.info p.text-title', elements => {
+    return elements.slice(0, 3).map(element => element.textContent.trim());
+  });
+
+  const imagenes3 = await page.$$eval('picture.cont-img img.image.lozad', imgs => {
+    return imgs.slice(0, 3).map(img => img.getAttribute('src'));
+  });
+
+  const precios3 = await page.$$eval('span.text-price', spans => {
+    return spans.slice(0, 3).map(span => span.textContent.trim().replace(/[^\d]/g, ''));
+  });  
+
+  const enlaces3 = await page.$$eval('a.link', enlaces => {
+    return enlaces.slice(0, 3).map(enlace => "https://www.farmatodo.com.co" + enlace.getAttribute('href'));
+  });
 
   // Se cierra el Cronium
 
@@ -88,6 +109,11 @@ async function scrapeData(query) {
 
   let drogueria2 = {
     nombre_drogueria: "La Rebaja",
+    articulos: []
+  };
+
+  let drogueria3 = {
+    nombre_drogueria: "Farmatodo",
     articulos: []
   };
 
@@ -113,8 +139,18 @@ async function scrapeData(query) {
     drogueria2.articulos.push(producto);
   }
 
+  for (let i = 0; i < nombres3.length; i++) {
+    let producto = {
+      nombre: nombres3[i],
+      precio: precios3[i],
+      imagen: imagenes3[i],
+      enlaces: enlaces3[i]
+    };
+    drogueria3.articulos.push(producto);
+  }
 
-  return [drogueria1, drogueria2];
+
+  return [drogueria1, drogueria2, drogueria3];
 }
 
 module.exports = scrapeData;

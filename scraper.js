@@ -96,6 +96,32 @@ async function scrapeData(query) {
     return enlaces.slice(0, 3).map(enlace => "https://www.farmatodo.com.co" + enlace.getAttribute('href'));
   });
 
+  // Farmacia Torres
+
+  await page.goto(`https://www.farmaciatorres.com/busqueda/${encodeURIComponent(query)}`);
+
+  await page.waitForTimeout(5000);
+
+  await page.screenshot({ path: 'pagina4_screenshot.png', fullPage: true });
+
+  const nombres4 = await page.$$eval('span.titulo', spans => {
+    return spans.slice(0, 3).map(span => span.textContent.trim());
+  });
+
+  const imagenes4 = await page.$$eval('div.image img', imgs => {
+    return imgs.slice(0, 3).map(img => img.getAttribute('src'));
+  });
+
+  const precios4 = await page.$$eval('span.precio', spans => {
+    return spans.slice(0, 3).map(span => span.textContent.trim().replace(/[^\d]/g, ''));
+  });
+
+  const enlaces4 = await page.$$eval('div.product-item', divs => {
+    return divs.slice(0, 3).map(div => "https://www.farmaciatorres.com/producto/" + div.getAttribute('data-id'));
+  });
+
+
+
   // Se cierra el Cronium
 
   await browser.close();
@@ -114,6 +140,11 @@ async function scrapeData(query) {
 
   let drogueria3 = {
     nombre_drogueria: "Farmatodo",
+    articulos: []
+  };
+
+  let drogueria4 = {
+    nombre_drogueria: "Farmacia Torres",
     articulos: []
   };
 
@@ -149,8 +180,18 @@ async function scrapeData(query) {
     drogueria3.articulos.push(producto);
   }
 
+  for (let i = 0; i < nombres4.length; i++) {
+    let producto = {
+      nombre: nombres4[i],
+      precio: precios4[i],
+      imagen: imagenes4[i],
+      enlaces: enlaces4[i]
+    };
+    drogueria4.articulos.push(producto);
+  }
 
-  return [drogueria1, drogueria2, drogueria3];
+
+  return [drogueria1, drogueria2, drogueria3, drogueria4];
 }
 
 module.exports = scrapeData;

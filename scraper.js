@@ -8,17 +8,17 @@ async function scrapeData(query) {
 
   await page.goto(`https://www.cruzverde.com.co/search?query=${encodeURIComponent(query)}`);
 
-  await page.waitForLoadState('networkidle');
+  await page.waitForTimeout(5000);
 
   await page.screenshot({ path: 'pagina1_screenshot.png', fullPage: true });
 
   const nombres = await page.$$eval('a.font-open.flex.items-center.text-main.text-16.sm\\:text-18.leading-20.font-semibold.ellipsis.hover\\:text-accent span.ng-star-inserted', spans => {
-    return spans.slice(0, 3).map(span => span.innerText);
+    return spans.slice(0, 5).map(span => span.innerText);
   });
 
 
   const imagenes = await page.$$eval('a[class*="ng-tns-c36-"].ng-star-inserted img', imgs => {
-    const desiredClasses = ['ng-tns-c36-13', 'ng-tns-c36-14', 'ng-tns-c36-15'];
+    const desiredClasses = ['ng-tns-c36-13', 'ng-tns-c36-14', 'ng-tns-c36-15', 'ng-tns-c36-16', 'ng-tns-c36-17'];
     const filteredImgs = imgs.filter(img => {
       const parentClass = img.closest('a').className;
       return desiredClasses.some(cls => parentClass.includes(cls));
@@ -28,11 +28,11 @@ async function scrapeData(query) {
 
 
   const precios = await page.$$eval('span.font-bold.text-prices', spans => {
-    return spans.slice(0, 3).map(span => span.textContent.trim().replace(/[^\d]/g, ''));
+    return spans.slice(0, 5).map(span => span.textContent.trim().replace(/[^\d]/g, ''));
   });
 
   const enlaces = await page.$$eval('a.font-open.flex.items-center.text-main.text-16.sm\\:text-18.leading-20.font-semibold.ellipsis.hover\\:text-accent', links => {
-    return links.slice(0, 3).map(link => "https://www.cruzverde.com.co" + link.getAttribute('href'));
+    return links.slice(0, 5).map(link => "https://www.cruzverde.com.co" + link.getAttribute('href'));
   });
 
   //La Rebaja
@@ -44,12 +44,12 @@ async function scrapeData(query) {
   await page.screenshot({ path: 'pagina2_screenshot.png', fullPage: true });
 
   const nombres2 = await page.$$eval('span.vtex-product-summary-2-x-productBrand', spans => {
-    return spans.slice(0, 3).map(span => span.textContent.trim());
+    return spans.slice(0, 5).map(span => span.textContent.trim());
   });
 
 
   const imagenes2 = await page.$$eval('img.vtex-product-summary-2-x-imageNormal', imgs => {
-    return imgs.slice(0, 3).map(img => img.getAttribute('src'));
+    return imgs.slice(0, 5).map(img => img.getAttribute('src'));
   });
 
   const spams = await page.$$eval('span.vtex-product-price-1-x-currencyInteger--summary', spams => {
@@ -65,11 +65,11 @@ async function scrapeData(query) {
     concatenaciones.push(concatenacion);
   }
 
-  const precios2 = concatenaciones.slice(0, 3)
+  const precios2 = concatenaciones.slice(0, 5)
 
 
   const enlaces2 = await page.$$eval('a.vtex-product-summary-2-x-clearLink', enlaces => {
-    return enlaces.slice(0, 3).map(enlace => "https://www.larebajavirtual.com" + enlace.getAttribute('href'));
+    return enlaces.slice(0, 5).map(enlace => "https://www.larebajavirtual.com" + enlace.getAttribute('href'));
   });
 
   // Farmatodo
@@ -81,19 +81,19 @@ async function scrapeData(query) {
   await page.screenshot({ path: 'pagina3_screenshot.png', fullPage: true });
 
   const nombres3 = await page.$$eval('div.text-left.info p.text-title', elements => {
-    return elements.slice(0, 3).map(element => element.textContent.trim());
+    return elements.slice(0, 5).map(element => element.textContent.trim());
   });
 
   const imagenes3 = await page.$$eval('picture.cont-img img.image.lozad', imgs => {
-    return imgs.slice(0, 3).map(img => img.getAttribute('src'));
+    return imgs.slice(0, 5).map(img => img.getAttribute('src'));
   });
 
   const precios3 = await page.$$eval('span.text-price', spans => {
-    return spans.slice(0, 3).map(span => span.textContent.trim().replace(/[^\d]/g, ''));
+    return spans.slice(0, 5).map(span => span.textContent.trim().replace(/[^\d]/g, ''));
   });  
 
   const enlaces3 = await page.$$eval('a.link', enlaces => {
-    return enlaces.slice(0, 3).map(enlace => "https://www.farmatodo.com.co" + enlace.getAttribute('href'));
+    return enlaces.slice(0, 5).map(enlace => "https://www.farmatodo.com.co" + enlace.getAttribute('href'));
   });
 
   // Farmacia Torres
@@ -105,22 +105,24 @@ async function scrapeData(query) {
   await page.screenshot({ path: 'pagina4_screenshot.png', fullPage: true });
 
   const nombres4 = await page.$$eval('span.titulo', spans => {
-    return spans.slice(0, 3).map(span => span.textContent.trim());
+    return spans.slice(0, 5).map(span => span.textContent.trim());
   });
 
   const imagenes4 = await page.$$eval('div.image img', imgs => {
-    return imgs.slice(0, 3).map(img => img.getAttribute('src'));
+    return imgs.slice(0, 5).map(img => img.getAttribute('src'));
   });
 
   const precios4 = await page.$$eval('span.precio', spans => {
-    return spans.slice(0, 3).map(span => span.textContent.trim().replace(/[^\d]/g, ''));
+    return spans.slice(0, 5).map(span => span.textContent.trim().replace(/[^\d]/g, ''));
   });
 
   const enlaces4 = await page.$$eval('div.product-item', divs => {
-    return divs.slice(0, 3).map(div => "https://www.farmaciatorres.com/producto/" + div.getAttribute('data-id'));
+    return divs.slice(0, 5).map(div => "https://www.farmaciatorres.com/producto/" + div.getAttribute('data-id'));
   });
 
+  // Cafam
 
+  
 
   // Se cierra el Cronium
 

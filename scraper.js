@@ -27,13 +27,8 @@ async function scrapeData(query) {
   });
 
 
-  const precios = await page.evaluate(() => {
-    const elementos = document.querySelectorAll('div.flex.items-center.order-4.ng-star-inserted span.font-bold.text-prices');
-    const preciosArray = [];
-    for (let i = 0; i < 3 && i < elementos.length; i++) {
-      preciosArray.push(elementos[i].innerText);
-    }
-    return preciosArray;
+  const precios = await page.$$eval('span.font-bold.text-prices', spans => {
+    return spans.slice(0, 3).map(span => span.textContent.trim().replace(/[^\d]/g, ''));
   });
 
   const enlaces = await page.$$eval('a.font-open.flex.items-center.text-main.text-16.sm\\:text-18.leading-20.font-semibold.ellipsis.hover\\:text-accent', links => {

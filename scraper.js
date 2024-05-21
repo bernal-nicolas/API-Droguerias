@@ -120,80 +120,50 @@ async function scrapeData(query) {
     return divs.slice(0, 5).map(div => "https://www.farmaciatorres.com/producto/" + div.getAttribute('data-id'));
   });
 
-  // Cafam
-
-  
+    
 
   // Se cierra el Cronium
 
   await browser.close();
 
-  //Creacion JSON
+  //Creacion JSON y ordenamiento del menor a mayor
 
-  let farmacia1 = {
-    nombre_farmacia: "Cruz Verde",
-    articulos: []
-  };
+  function crearJSONConProductosMasBaratos(nombres, precios, imagenes, enlaces, nombres2, precios2, imagenes2, enlaces2, nombres3, precios3, imagenes3, enlaces3, nombres4, precios4, imagenes4, enlaces4) {
 
-  let farmacia2 = {
-    nombre_farmacia: "La Rebaja",
-    articulos: []
-  };
+    let farmacias = [
+      { nombre_farmacia: "Cruz Verde", articulos: [] },
+      { nombre_farmacia: "La Rebaja", articulos: [] },
+      { nombre_farmacia: "Farmatodo", articulos: [] },
+      { nombre_farmacia: "Farmacia Torres", articulos: [] }
+    ];
+  
+    function añadirProductos(farmacia, nombres, precios, imagenes, enlaces) {
+      for (let i = 0; i < nombres.length; i++) {
+        let producto = {
+          nombre: nombres[i],
+          precio: precios[i],
+          imagen: imagenes[i],
+          enlaces: enlaces[i]
+        };
+        farmacia.articulos.push(producto);
+      }
 
-  let farmacia3 = {
-    nombre_farmacia: "Farmatodo",
-    articulos: []
-  };
+      farmacia.articulos.sort((a, b) => a.precio - b.precio);
 
-  let farmacia4 = {
-    nombre_farmacia: "Farmacia Torres",
-    articulos: []
-  };
-
-
-  for (let i = 0; i < nombres.length; i++) {
-    let producto = {
-      nombre: nombres[i],
-      precio: precios[i],
-      imagen: imagenes[i],
-      enlaces: enlaces[i]
-    };
-    farmacia1.articulos.push(producto);
+      farmacia.articulos = farmacia.articulos.slice(0, 3);
+    }
+  
+    añadirProductos(farmacias[0], nombres, precios, imagenes, enlaces);
+    añadirProductos(farmacias[1], nombres2, precios2, imagenes2, enlaces2);
+    añadirProductos(farmacias[2], nombres3, precios3, imagenes3, enlaces3);
+    añadirProductos(farmacias[3], nombres4, precios4, imagenes4, enlaces4);
+  
+    return farmacias;
   }
 
+  const resultado = crearJSONConProductosMasBaratos(nombres, precios, imagenes, enlaces, nombres2, precios2, imagenes2, enlaces2, nombres3, precios3, imagenes3, enlaces3, nombres4, precios4, imagenes4, enlaces4);
 
-  for (let i = 0; i < nombres2.length; i++) {
-    let producto = {
-      nombre: nombres2[i],
-      precio: precios2[i],
-      imagen: imagenes2[i],
-      enlaces: enlaces2[i]
-    };
-    farmacia2.articulos.push(producto);
-  }
-
-  for (let i = 0; i < nombres3.length; i++) {
-    let producto = {
-      nombre: nombres3[i],
-      precio: precios3[i],
-      imagen: imagenes3[i],
-      enlaces: enlaces3[i]
-    };
-    farmacia3.articulos.push(producto);
-  }
-
-  for (let i = 0; i < nombres4.length; i++) {
-    let producto = {
-      nombre: nombres4[i],
-      precio: precios4[i],
-      imagen: imagenes4[i],
-      enlaces: enlaces4[i]
-    };
-    farmacia4.articulos.push(producto);
-  }
-
-
-  return [farmacia1, farmacia2, farmacia3, farmacia4];
+  return resultado;
 }
 
 module.exports = scrapeData;

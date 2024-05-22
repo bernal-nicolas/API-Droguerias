@@ -14,6 +14,7 @@ app.get('/search', async (req, res) => {
     res.json(data);
   } catch (error) {
     res.status(500).send('Error fetching data');
+    console.log(error);
   }
 });
 

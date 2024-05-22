@@ -90,7 +90,7 @@ async function scrapeData(query) {
 
   const precios3 = await page.$$eval('span.text-price', spans => {
     return spans.slice(0, 5).map(span => span.textContent.trim().replace(/[^\d]/g, ''));
-  });  
+  });
 
   const enlaces3 = await page.$$eval('a.link', enlaces => {
     return enlaces.slice(0, 5).map(enlace => "https://www.farmatodo.com.co" + enlace.getAttribute('href'));
@@ -120,7 +120,34 @@ async function scrapeData(query) {
     return divs.slice(0, 5).map(div => "https://www.farmaciatorres.com/producto/" + div.getAttribute('data-id'));
   });
 
-    
+  // Farmacias Pasteur
+
+  await page.goto(`https://www.farmaciaspasteur.com.co/${encodeURIComponent(query)}?_q=${encodeURIComponent(query)}&map=ft`);
+
+  await page.waitForTimeout(5000);
+
+  await page.screenshot({ path: 'pagina5_screenshot.png', fullPage: true });
+
+  const nombres5 = await page.$$eval('span.vtex-product-summary-2-x-productBrand.vtex-product-summary-2-x-brandName.t-body', spans => {
+    return spans.slice(0, 5).map(span => span.textContent.trim());
+  });
+
+  const imagenes5 = await page.$$eval('img.vtex-product-summary-2-x-imageInline.vtex-product-summary-2-x-image', imgs => {
+    return imgs.slice(0, 5).map(img => img.src);
+  });
+
+  const precios5 = await page.$$eval('span.vtex-product-price-1-x-sellingPriceValue', spans => {
+    return spans.slice(0, 5).map(span => {
+      const precioLimpio = span.textContent.trim().replace(/[^\d]/g, '');
+      return precioLimpio;
+    });
+  });
+
+  const listaenlaces5 = await page.$$eval('section.vtex-product-summary-2-x-container a', anchors => {
+    return anchors.map(anchor => anchor.href);
+  });
+
+  const enlaces5 = listaenlaces5.slice(0, 5);
 
   // Se cierra el Cronium
 
@@ -128,15 +155,16 @@ async function scrapeData(query) {
 
   //Creacion JSON y ordenamiento del menor a mayor
 
-  function crearJSONConProductosMasBaratos(nombres, precios, imagenes, enlaces, nombres2, precios2, imagenes2, enlaces2, nombres3, precios3, imagenes3, enlaces3, nombres4, precios4, imagenes4, enlaces4) {
+  function crearJSONConProductosMasBaratos(nombres, precios, imagenes, enlaces, nombres2, precios2, imagenes2, enlaces2, nombres3, precios3, imagenes3, enlaces3, nombres4, precios4, imagenes4, enlaces4, nombres5, precios5, imagenes5, enlaces5) {
 
     let farmacias = [
       { nombre_farmacia: "Cruz Verde", articulos: [] },
       { nombre_farmacia: "La Rebaja", articulos: [] },
       { nombre_farmacia: "Farmatodo", articulos: [] },
-      { nombre_farmacia: "Farmacia Torres", articulos: [] }
+      { nombre_farmacia: "Farmacia Torres", articulos: [] },
+      { nombre_farmacia: "Farmacias Pasteur", articulos: [] }
     ];
-  
+
     function añadirProductos(farmacia, nombres, precios, imagenes, enlaces) {
       for (let i = 0; i < nombres.length; i++) {
         let producto = {
@@ -152,16 +180,17 @@ async function scrapeData(query) {
 
       farmacia.articulos = farmacia.articulos.slice(0, 3);
     }
-  
+
     añadirProductos(farmacias[0], nombres, precios, imagenes, enlaces);
     añadirProductos(farmacias[1], nombres2, precios2, imagenes2, enlaces2);
     añadirProductos(farmacias[2], nombres3, precios3, imagenes3, enlaces3);
     añadirProductos(farmacias[3], nombres4, precios4, imagenes4, enlaces4);
-  
+    añadirProductos(farmacias[4], nombres5, precios5, imagenes5, enlaces5);
+
     return farmacias;
   }
 
-  const resultado = crearJSONConProductosMasBaratos(nombres, precios, imagenes, enlaces, nombres2, precios2, imagenes2, enlaces2, nombres3, precios3, imagenes3, enlaces3, nombres4, precios4, imagenes4, enlaces4);
+  const resultado = crearJSONConProductosMasBaratos(nombres, precios, imagenes, enlaces, nombres2, precios2, imagenes2, enlaces2, nombres3, precios3, imagenes3, enlaces3, nombres4, precios4, imagenes4, enlaces4, nombres5, precios5, imagenes5, enlaces5);
 
   return resultado;
 }

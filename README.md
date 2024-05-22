@@ -15,7 +15,7 @@ Junto a lo anterior debes instalar chromium, para ello ejecuta el siguiente coma
     ```bash
     npx playwright install
     ```
-    
+
 Además, necesitarás tener instalado Node.js en tu equipo. Puedes descargarlo desde la página oficial de Node.js.
 
 ## Instalación
@@ -25,7 +25,7 @@ Para instalar la aplicación, sigue estos pasos:
 1. Clona el repositorio:
 
     ```bash
-    git clone
+    git clone https://github.com/bernal-nicolas/API-Droguerias.git
     ```
 
 2. Instala las dependencias:

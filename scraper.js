@@ -30,22 +30,25 @@ async function scrapeCruzVerde(query) {
 
   await browser.close();
 
-  const cruzVerde = {
-    nombre_farmacia: "Cruz Verde",
-    articulos: []
-  };
+  const productos = [];
 
-  for (let i = 0; i < nombres.length; i++) {
+for (let i = 0; i < nombres.length; i++) {
     const producto = {
-      nombre: nombres[i],
-      precio: precios[i],
-      imagen: imagenes[i],
-      enlaces: enlaces[i]
+        nombre: nombres[i],
+        precio: precios[i],
+        imagen: imagenes[i],
+        enlaces: enlaces[i],
+        farmacia: "Cruz Verde"
     };
-    cruzVerde.articulos.push(producto);
-  }
+    productos.push(producto);
+}
 
-  return cruzVerde;
+productos.sort((a, b) => a.precio - b.precio);
+
+// Selecciona los primeros 3 productos
+const productosMasBaratos = productos.slice(0, 3);
+
+return productosMasBaratos;
 }
 
 async function scrapeLaRebaja(query) {
@@ -84,22 +87,25 @@ async function scrapeLaRebaja(query) {
 
   await browser.close();
 
-  const laRebaja = {
-    nombre_farmacia: "La Rebaja",
-    articulos: []
-  };
+  const productos = [];
 
-  for (let i = 0; i < nombres.length; i++) {
+for (let i = 0; i < nombres.length; i++) {
     const producto = {
-      nombre: nombres[i],
-      precio: precios[i],
-      imagen: imagenes[i],
-      enlaces: enlaces[i]
+        nombre: nombres[i],
+        precio: precios[i],
+        imagen: imagenes[i],
+        enlaces: enlaces[i],
+        farmacia: "La Rebaja"
     };
-    laRebaja.articulos.push(producto);
-  }
+    productos.push(producto);
+}
 
-  return laRebaja;
+productos.sort((a, b) => a.precio - b.precio);
+
+// Selecciona los primeros 3 productos
+const productosMasBaratos = productos.slice(0, 3);
+
+return productosMasBaratos;
 }
 
 async function scrapeFarmatodo(query) {
@@ -127,22 +133,25 @@ async function scrapeFarmatodo(query) {
 
   await browser.close();
 
-  const farmatodo = {
-    nombre_farmacia: "Farmatodo",
-    articulos: []
-  };
+  const productos = [];
 
-  for (let i = 0; i < nombres.length; i++) {
+for (let i = 0; i < nombres.length; i++) {
     const producto = {
-      nombre: nombres[i],
-      precio: precios[i],
-      imagen: imagenes[i],
-      enlaces: enlaces[i]
+        nombre: nombres[i],
+        precio: precios[i],
+        imagen: imagenes[i],
+        enlaces: enlaces[i],
+        farmacia: "Farmatodo"
     };
-    farmatodo.articulos.push(producto);
-  }
+    productos.push(producto);
+}
 
-  return farmatodo;
+productos.sort((a, b) => a.precio - b.precio);
+
+// Selecciona los primeros 3 productos
+const productosMasBaratos = productos.slice(0, 3);
+
+return productosMasBaratos;
 }
 
 async function scrapeFarmaciaTorres(query) {
@@ -150,7 +159,7 @@ async function scrapeFarmaciaTorres(query) {
   const page = await browser.newPage();
 
   await page.goto(`https://www.farmaciatorres.com/busqueda/${encodeURIComponent(query)}`);
-  await page.waitForTimeout(5000);
+  await page.waitForTimeout(10000);
 
   const nombres = await page.$$eval('span.titulo', spans => {
     return spans.slice(0, 5).map(span => span.textContent.trim());
@@ -170,22 +179,25 @@ async function scrapeFarmaciaTorres(query) {
 
   await browser.close();
 
-  const farmaciaTorres = {
-    nombre_farmacia: "Farmacia Torres",
-    articulos: []
-  };
+  const productos = [];
 
-  for (let i = 0; i < nombres.length; i++) {
+for (let i = 0; i < nombres.length; i++) {
     const producto = {
-      nombre: nombres[i],
-      precio: precios[i],
-      imagen: imagenes[i],
-      enlaces: enlaces[i]
+        nombre: nombres[i],
+        precio: precios[i],
+        imagen: imagenes[i],
+        enlaces: enlaces[i],
+        farmacia: "Farmacia Torres"
     };
-    farmaciaTorres.articulos.push(producto);
-  }
+    productos.push(producto);
+}
 
-  return farmaciaTorres;
+productos.sort((a, b) => a.precio - b.precio);
+
+// Selecciona los primeros 3 productos
+const productosMasBaratos = productos.slice(0, 3);
+
+return productosMasBaratos;
 }
 
 async function scrapeFarmaciasPasteur(query) {
@@ -218,22 +230,25 @@ async function scrapeFarmaciasPasteur(query) {
 
   await browser.close();
 
-  const farmaciasPasteur = {
-    nombre_farmacia: "Farmacias Pasteur",
-    articulos: []
-  };
+  const productos = [];
 
-  for (let i = 0; i < nombres.length; i++) {
+for (let i = 0; i < nombres.length; i++) {
     const producto = {
-      nombre: nombres[i],
-      precio: precios[i],
-      imagen: imagenes[i],
-      enlaces: enlaces[i]
+        nombre: nombres[i],
+        precio: precios[i],
+        imagen: imagenes[i],
+        enlaces: enlaces[i],
+        farmacia: "Farmacias Pasteur"
     };
-    farmaciasPasteur.articulos.push(producto);
-  }
+    productos.push(producto);
+}
 
-  return farmaciasPasteur;
+productos.sort((a, b) => a.precio - b.precio);
+
+// Selecciona los primeros 3 productos
+const productosMasBaratos = productos.slice(0, 3);
+
+return productosMasBaratos;
 }
 
 async function scrapeData(query) {
@@ -245,15 +260,15 @@ async function scrapeData(query) {
     scrapeFarmaciasPasteur(query)
   ]);
 
-  const resultado = [cruzVerde, laRebaja, farmatodo, farmaciaTorres, farmaciasPasteur];
+  // Combina todos los arrays de productos en uno solo
+  const resultado = [
+    ...cruzVerde,
+    ...laRebaja,
+    ...farmatodo,
+    ...farmaciaTorres,
+    ...farmaciasPasteur
+  ];
 
-  // Modificar el objeto de respuesta de tal forma
-  // que por cada farmacia solo se muestren los 3
-  // productos más baratos.
-  resultado.forEach(farmacia => {
-    farmacia.articulos.sort((a, b) => a.precio - b.precio);
-    farmacia.articulos = farmacia.articulos.slice(0, 3);
-  });
   return resultado;
 }
 

@@ -1,7 +1,11 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const port = 3000;
 const scrapeData = require('./scraper');
+
+// Use cors middleware
+app.use(cors());
 
 app.get('/search', async (req, res) => {
   const query = req.query.query;

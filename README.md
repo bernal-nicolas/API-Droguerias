@@ -2,6 +2,11 @@
 
 Este es el repositorio de la API-Droguerias, una aplicación que utiliza Playwright para automatizar tareas en el navegador.
 
+## Estudiantes
+
+- Aiker Ary Acosta Cantillo
+- Nicolás Bernal Bernal
+
 ## Requisitos previos
 
 Antes de comenzar, asegúrate de tener instalado Playwright en tu entorno de desarrollo. Puedes hacerlo ejecutando el siguiente comando:
